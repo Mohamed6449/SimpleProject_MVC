@@ -1,0 +1,25 @@
+## Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+bin/
+obj/
+TestResults/
+*.log
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+## Others
+*.vsidx
+*.cache
+*.db

@@ -1,0 +1,32 @@
+﻿@model product
+
+<div >
+
+<form asp-action="IUpdate" method="post" encType="multipart/form-data">
+<div asp-validation-summary="All"></div>
+	<input type="hidden" asp-for="Id" />
+	<input type="hidden" asp-for="path" />
+	<Label>Name</Label>
+	<div>
+	<input asp-for="Name" class="form-control" />
+	<span asp-validation-for="Name" class="text-danger" ></span>
+	</div>
+	<Label>price</Label>
+	<div>
+	<input asp-for="Price" class="form-control" />
+	<span asp-validation-for="Price" class="text-danger"></span>
+	</div>
+	<div>
+	<label>File</label>
+	<img src="@Model.path" width="100" />
+	</div>
+	<div>
+	<label>File</label>
+	<input type="file" asp-for="File" class="form-control" />
+	<span asp-validation-for="File" class="text-danger"></span>
+	</div>
+	<input type="submit" value="save" class="btn btn-primary"/>
+
+	<input type="submit" value="save" class="btn btn-primary"/>
+</form>
+</div>
