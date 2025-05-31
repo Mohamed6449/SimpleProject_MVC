@@ -15,6 +15,7 @@ builder.Services.AddTransient<IProductService, ProductService>();
 
 builder.Services.AddTransient<ICategoryServices, CategoryServices>();
 
+
 builder.Services.AddTransient<IFileServiece,FileServices>();
 
 builder.Services.AddControllersWithViews();

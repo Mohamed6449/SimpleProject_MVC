@@ -3,6 +3,7 @@ using MCV_Empity.Models;
 using MCV_Empity.Services.InterFaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace MCV_Empity.Services.Implementations
 {
@@ -30,6 +31,8 @@ namespace MCV_Empity.Services.Implementations
 		#region Implement Functions
 		public async Task<string> AddProduct(product product,List<IFormFile>? Files)
 		{
+			var  Paths = new List<string>();
+			var ap =await _appDbContext.Database.BeginTransactionAsync();
 			try
 			{
 				if (Files!=null&& Files.Count > 0)
@@ -37,18 +40,27 @@ namespace MCV_Empity.Services.Implementations
 				var productimage = new List<ProductImages>();
 					foreach (var item in Files)
 					{
-						productimage.Add(new ProductImages() { path= await _fileServiece.Upload(item, "/image/")});
-
+						string paths = await _fileServiece.Upload(item, "/image/");
+						productimage.Add(new ProductImages() { path=paths});
+						Paths.Add(paths);
 					}
+
+
 				product.ProductImages = productimage;
 				}
 				await _appDbContext.Products.AddAsync(product);
 				await _appDbContext.SaveChangesAsync();
+				await ap.CommitAsync();
 				return "Success";
 
 			}
 			catch (Exception ex)
 			{
+				await ap.RollbackAsync();
+				foreach(var item in Paths)
+				{
+					_fileServiece.DeleteSource(item);
+				}
 				return ex.Message+"--"+ex.InnerException;
 			}
 
@@ -59,6 +71,7 @@ namespace MCV_Empity.Services.Implementations
 		{
 			try
 			{
+				
 				//string path = productR.path;
 				_appDbContext.Products.Remove(productR);
 				_ = await _appDbContext.SaveChangesAsync();
