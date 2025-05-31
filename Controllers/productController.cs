@@ -43,7 +43,7 @@ namespace MCV_Empity.Controllers
             try
             {
 
-
+				
                 if (ModelState.IsValid)
                 {
 					var product = _mapper.Map<product>(model);
