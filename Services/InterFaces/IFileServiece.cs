@@ -5,6 +5,6 @@ namespace MCV_Empity.Services.InterFaces
     {
         public  Task<string> Upload(IFormFile formFile,string Location);
 
-        public bool DeleteSource(string path);
+        public bool DeleteSource(string? path);
     }
 }

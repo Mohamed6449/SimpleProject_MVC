@@ -1,10 +1,34 @@
-﻿@model product
+﻿@model IEnumerable< Category>
 @{
 	ViewBag.Title = "Home Page";
-	
 }
 
-<h1>welcome @Model.Name</h1>
+
+@foreach(var item in Model)
+{
+	<h1>@item.Name</h1>
+	<div class="row">
+	@foreach(var initem in item.product)
+	{
+
+			<div class="card col-lg-4 col-md-6 col-sm-12" >
+				<div class="card-header">@initem.Name</div>
+			
+				<div class="card-body">
+					@initem.Price
+				</div>
+				<div class="card-footer">
+							<a asp-action="Details" asp-controller="product" asp-route-Id="@initem.Id"
+							class ="btn btn-info"> Detaills</a>
+				</div>
+			</div>
+	}
+	</div>
+
+}
+
+
+
 
 @section Scripts{
 

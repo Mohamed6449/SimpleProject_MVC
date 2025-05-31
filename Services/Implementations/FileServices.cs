@@ -47,11 +47,11 @@ namespace MCV_Empity.Services.Implementations
            
                 return $"{Location}/{fileName}";
                 }
-                catch
-                {
-                    return "Not saved";
-                }
-            
+                catch(Exception ex)
+            {
+                return ex.Message + "--"+ex.InnerException;
+            }
+
 
 
         }

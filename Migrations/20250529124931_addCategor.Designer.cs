@@ -3,6 +3,7 @@ using MCV_Empity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCV_Empity.Migrations
 {
     [DbContext(typeof(AppDbContect))]
-    partial class AppDbContectModelSnapshot : ModelSnapshot
+    [Migration("20250529124931_addCategor")]
+    partial class addCategor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,27 +40,6 @@ namespace MCV_Empity.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("MCV_Empity.Models.ProductImages", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("path")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("productId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("productId");
-
-                    b.ToTable("ProductImages");
-                });
-
             modelBuilder.Entity("MCV_Empity.Models.product", b =>
                 {
                     b.Property<int>("Id")
@@ -76,22 +58,14 @@ namespace MCV_Empity.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("path")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("MCV_Empity.Models.ProductImages", b =>
-                {
-                    b.HasOne("MCV_Empity.Models.product", "product")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("MCV_Empity.Models.product", b =>
@@ -108,11 +82,6 @@ namespace MCV_Empity.Migrations
             modelBuilder.Entity("MCV_Empity.Models.Category", b =>
                 {
                     b.Navigation("product");
-                });
-
-            modelBuilder.Entity("MCV_Empity.Models.product", b =>
-                {
-                    b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
         }

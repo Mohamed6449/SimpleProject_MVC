@@ -1,26 +1,43 @@
-﻿@model product
-
-
+﻿@model AddProductViewModels
 
 <div >
+	<form asp-action="Create" method="post" encType="multipart/form-data">
+		<div asp-validation-summary="All"></div>
+		<Label>Name</Label>
+		<div>
+			<input asp-for="Name" class="form-control" />
+			<span asp-validation-for="Name" class="text-danger" ></span>
+		</div>
+			<Label>price</Label>
+		<div>
+			<input asp-for="Price" class="form-control" />
+			<span asp-validation-for="Price" class="text-danger"></span>
+		</div>
+		<div>
+			<label>File</label>
+			<input type="file" asp-for="Files" class="form-control" multiple />
+			<span asp-validation-for="Files" class="text-danger"></span>
+		</div>
+		<div>
+			<label>File</label>
+			<select  asp-for="CategoryId" class="form-control" asp-items="ViewBag.Category">
 
-<form asp-action="Create" method="post" encType="multipart/form-data">
-	<div asp-validation-summary="All"></div>
-	<Label>Name</Label>
-	<div>
-	<input asp-for="Name" class="form-control" />
-	<span asp-validation-for="Name" class="text-danger" ></span>
-	</div>
-	<Label>price</Label>
-	<div>
-	<input asp-for="Price" class="form-control" />
-	<span asp-validation-for="Price" class="text-danger"></span>
-	</div>
-	<div>
-	<label>File</label>
-	<input type="file" asp-for="File" class="form-control" />
-	<span asp-validation-for="File" class="text-danger"></span>
-	</div>
-	<input type="submit" value="save" class="btn btn-primary"/>
-</form>
+			</select>
+			<span asp-validation-for="CategoryId" class="text-danger"></span>
+		</div>
+		<input type="submit" value="save" class="btn btn-primary"/>
+	</form>
 </div>
+
+
+
+
+
+
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

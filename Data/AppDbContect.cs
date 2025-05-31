@@ -15,6 +15,8 @@ namespace MCV_Empity.Data
 		}
 
 		public DbSet<product>Products { get; set; }
+		public DbSet<Category> Category { get; set; }
+		public DbSet<ProductImages> ProductImages { get; set; }
 
 	}
 }

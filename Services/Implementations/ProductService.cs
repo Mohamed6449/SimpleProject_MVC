@@ -28,11 +28,20 @@ namespace MCV_Empity.Services.Implementations
 		#endregion
 
 		#region Implement Functions
-		public async Task<string> AddProduct(product product)
+		public async Task<string> AddProduct(product product,List<IFormFile>? Files)
 		{
 			try
 			{
-				product.Id = await _appDbContext.Products.MaxAsync(M => M.Id) + 1;
+				if (Files!=null&& Files.Count > 0)
+				{
+				var productimage = new List<ProductImages>();
+					foreach (var item in Files)
+					{
+						productimage.Add(new ProductImages() { path= await _fileServiece.Upload(item, "/image/")});
+
+					}
+				product.ProductImages = productimage;
+				}
 				await _appDbContext.Products.AddAsync(product);
 				await _appDbContext.SaveChangesAsync();
 				return "Success";
@@ -46,22 +55,17 @@ namespace MCV_Empity.Services.Implementations
 			
 		}
 
-		public async Task<string> DeleteProduct(int ProductId)
+		public async Task<string> DeleteProduct(product productR)
 		{
 			try
 			{
-
-			string path="";
-			var resul = await GetProductById(ProductId);
-			if (resul != null)
-			{
-				path =resul.path;
-				_appDbContext.Products.Remove(resul);
-				await _appDbContext.SaveChangesAsync();
-			}
-			_fileServiece.DeleteSource(path);
+				//string path = productR.path;
+				_appDbContext.Products.Remove(productR);
+				_ = await _appDbContext.SaveChangesAsync();
+				//_fileServiece.DeleteSource(path);
 				return "Success";
 			}
+			
 			catch (Exception ex)
 			{
 				return ex.Message + "--" + ex.InnerException;
@@ -71,7 +75,7 @@ namespace MCV_Empity.Services.Implementations
 		public async Task< product?> GetProductById(int ProductId)
 		{
 
-			return await _appDbContext.Products.FindAsync(ProductId);
+			return await _appDbContext.Products.AsNoTracking().FirstOrDefaultAsync(F=>F.Id== ProductId);
 
 		}
 
@@ -80,21 +84,21 @@ namespace MCV_Empity.Services.Implementations
 			return await _appDbContext.Products.ToListAsync();
 		}
 
+		public async Task<bool> IsProductNameExist(string Name)
+		{
+			var b= await _appDbContext.Products.AnyAsync(A => A.Name == Name);
+			return b;
+		}
+
 		public async Task<string> UpdateProduct(product product)
 		{
 			try
 			{
-				var resul = await GetProductById(product.Id);
-				if (resul != null)
-				{
-					resul.Name = product.Name;
-					resul.Price = product.Price;
-					resul.path = product.path;
-					_appDbContext.Products.Update(resul);
+
+					_appDbContext.Products.Update(product);
 					await _appDbContext.SaveChangesAsync();
 					return "Success";
-				}
-				return "faild";
+
 
 			}
 			catch (Exception ex)

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MCV_Empity.Services.Implementations;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MCV_Empity.Models
@@ -8,12 +10,14 @@ namespace MCV_Empity.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Range(2,4999,ErrorMessage ="number must be in range ") ]
-        [Required]
         public decimal Price { get; set; }
-        [NotMapped]
-        public IFormFile? File { get; set; }
 
-        public string? path { get; set; }
+        [ForeignKey("category")]
+
+        public int CategoryId { get; set; }
+
+        public Category? category { get; set; }
+
+        public ICollection<ProductImages> ProductImages { get; set; } = new HashSet<ProductImages>();
     }
 }

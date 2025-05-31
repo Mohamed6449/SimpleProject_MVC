@@ -1,21 +1,29 @@
-﻿using MCV_Empity.Models;
+﻿using MCV_Empity.Data;
+using MCV_Empity.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MCV_Empity.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContect _context;
+        public HomeController(AppDbContect context)
         {
-            var pro = new product() { Name = "ahmed", Id = 3 };
-            return View(pro);
+            _context = context;
+        }
+        public async Task< IActionResult> Index()
+        {
+            var Categorys = await _context.Category.Include(I => I.product).Take(5).ToListAsync();
+
+
+           
+            return View(Categorys);
+        
         }
 
-        public IActionResult Details([FromRoute(Name ="id")] int nu)
-        {
-            var pro = new product() { Name = "ahmed", Id = 3 };
-            return View(pro);
-        }
 
     }
+
+    
 }
