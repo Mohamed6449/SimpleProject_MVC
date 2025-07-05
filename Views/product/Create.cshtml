@@ -2,14 +2,18 @@
 @inject MCV_Empity.Services.InterFaces.IProductService _Iproduct 
 @* دلوقت تقدر تستعملها براحتك *@
 
-
 <div >
 	<form asp-action="Create" method="post" encType="multipart/form-data">
-		<div asp-validation-summary="All"></div>
-		<Label>Name</Label>
+		<div asp-validation-summary="All"></div>            
+		<Label>NameAr</Label>
 		<div>
-			<input asp-for="Name" class="form-control" />
-			<span asp-validation-for="Name" class="text-danger" ></span>
+			<input asp-for="NameAr" class="form-control" />
+			<span asp-validation-for="NameAr" class="text-danger" ></span>
+		</div>
+		<Label>NameEn</Label>
+		<div>
+			<input asp-for="NameEn" class="form-control" />
+			<span asp-validation-for="NameEn" class="text-danger" ></span>
 		</div>
 			<Label>price</Label>
 		<div>
@@ -22,7 +26,7 @@
 			<span asp-validation-for="Files" class="text-danger"></span>
 		</div>
 		<div>
-			<label>File</label>
+			<label>Category</label>
 			<select  asp-for="CategoryId" class="form-control" asp-items="ViewBag.Category">
 
 			</select>

@@ -6,13 +6,13 @@
 
 @foreach(var item in Model)
 {
-	<h1>@item.Name</h1>
+	<h1>@item.NameAr</h1>
 	<div class="row">
 	@foreach(var initem in item.product)
 	{
 
 			<div class="card col-lg-4 col-md-6 col-sm-12" >
-				<div class="card-header">@initem.Name</div>
+				<div class="card-header">@initem.NameAr</div>
 			
 				<div class="card-body">
 					@initem.Price

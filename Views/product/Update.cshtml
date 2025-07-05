@@ -1,31 +1,52 @@
-﻿@model product
+﻿@model UpdateProductViewModel;
 
 <div >
 
-<form asp-action="IUpdate" method="post" encType="multipart/form-data">
+<form asp-action="Update" method="post" encType="multipart/form-data">
 <div asp-validation-summary="All"></div>
 	<input type="hidden" asp-for="Id" />
+
 @* 	<input type="hidden" asp-for="path" />
- *@	<Label>Name</Label>
+ *@	<Label>NameAr</Label>
 	<div>
-	<input asp-for="Name" class="form-control" />
-	<span asp-validation-for="Name" class="text-danger" ></span>
+	<input asp-for="NameAr" class="form-control" />
+	<span asp-validation-for="NameAr" class="text-danger" ></span>
 	</div>
+	
+	<Label>NameEn</Label>
+	<div>
+	<input asp-for="NameEn" class="form-control" />
+	<span asp-validation-for="NameEn" class="text-danger" ></span>
+	</div>
+	<label>Category</label>
+	<select  asp-for="CategoryId" class="form-control" asp-items="ViewBag.Category">
+
+	</select>
+	<span asp-validation-for="CategoryId" class="text-danger"></span>
 	<Label>price</Label>
 	<div>
 	<input asp-for="Price" class="form-control" />
 	<span asp-validation-for="Price" class="text-danger"></span>
 	</div>
 	<div>
-	<label>File</label>
-@* 	<img src="@Model.path" width="100" />
-	</div>
+	<label>Current Images</label>
+			@if (Model.CurrentPaths != null)
+			{
+				@foreach (var path in Model.CurrentPaths)
+				{
+
+					<img src="@path" width="100" />
+					<input asp-for="CurrentPaths" type="hidden"/>
+				}
+			}
+		</div>
 	<div>
-	<label>File</label>
-	<input type="file" asp-for="File" class="form-control" />
-	<span asp-validation-for="File" class="text-danger"></span>
-	</div>
- *@	<input type="submit" value="save" class="btn btn-primary"/>
+		<div>
+			<label>File</label>
+			<input type="file" asp-for="Files" class="form-control" multiple />
+			<span asp-validation-for="Files" class="text-danger"></span>
+		</div>
+	<input type="submit" value="save" class="btn btn-primary"/>
 
 	<input type="submit" value="save" class="btn btn-primary"/>
 </form>

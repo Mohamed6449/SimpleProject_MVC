@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MCV_Empity.Helper;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MCV_Empity.Models
 {
-    public class ProductImages
+    public class ProductImages: LocalizableEntity
     {
         [Key]
         public int Id { get; set; }
