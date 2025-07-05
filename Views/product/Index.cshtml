@@ -1,40 +1,61 @@
-﻿@model IEnumerable<product> 
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> _SharedResources;
+
+@model IEnumerable<GetProductListViewModel>;
+
+<partial name="_Notifications"></partial>
 @{
 	ViewBag.Title = "Product List";
 }
 
+@* <h1>@TempData["UserId"]</h1> *@
+@* <h1>@TempData.Peek("UserId")</h1>
+<h1>@{
+		TempData.Keep("UserName");
+	}</h1>
+
+<h1>@TempData["UserName"]</h1> *@
 
 <h1 class="text-center">  Product List</h1>
+
 <div>
-	<a asp-action="Create" asp-controller="product" class ="btn btn-primary">Create New Product</a>
+	<p>
+		<a asp-action="Create" asp-controller="product" class ="btn btn-primary">Create New Product</a>
+	</p>
+	<div>
+		<div>
+			<form asp-action="Index" method="get"> 
+			<input id="search" name="search" type="text" placeholder="search ..." />
+			<input type="submit" value="search" />
+			</form>
+		</div>
+	
+		<div>
+			<input id="searchtext" type="text" placeholder="search ..." />
+		</div>
+	</div>
+
+
+
+
+
 </div>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<td>Id</td>
-			<td>Name</td>
-			<td>Price</td>
-			<td>Details</td>
-			<td>Edit</td>
-			<td>Delete</td>
-		</tr>
-	</thead>
-	<tbody>
-			
-		@foreach(var item in Model){
-		<tr>
-			<td>@item.Id</td>
-			<td>@item.Name</td>
-			<td>@item.Price</td>
-			
-			<td>
-					<a asp-action="Details" asp-controller="product" asp-route-Id="@item.Id"
-				class ="btn btn-info"> Detaills</a>'
-				
-			</td>
-			<td><a asp-action="Update" asp-route-Id="@item.Id" class ="btn btn-primary">Edit </a>  </td>
-			<td><a asp-action="Delete" asp-route-Id="@item.Id" class ="btn btn-danger">Delete </a>  </td>
-		</tr>
-		}
-	</tbody>
-</table>
+<div id="productData">
+	@await Html.PartialAsync("_ProductList", Model)
+</div>
+
+<script>
+	$(document).ready(function () {
+		$("#searchtext").on('input', function () {
+			var searchString = $(this).val();
+			$.ajax({
+				url: '@Url.Action("SearchProductList", "Product")',
+				type: 'GET',
+				data: { searchText: searchString },
+				success: function (result) {
+					$("#productData").html(result);
+				}
+			});
+		});
+	});
+</script>

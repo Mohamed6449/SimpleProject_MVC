@@ -1,0 +1,33 @@
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> _SharedResources;
+
+@model IEnumerable<GetProductListViewModel>;
+
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>@Html.DisplayNameFor(M => M.Id)</th>
+			<th>@Html.DisplayNameFor(M => M.Name)</th>
+			<td>@_SharedResources[SharedResourcesKeys.Price]</td>			
+		</tr>
+	</thead>
+	<tbody>
+
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Name</td>
+				<td>@item.Price</td>
+
+
+				<td>
+				<a asp-action="Details" asp-controller="product" asp-route-Id="@item.Id"class ="btn btn-info">Detaills</a>
+				</td>
+				<td><a asp-action="Update" asp-route-Id="@item.Id" class ="btn btn-primary">Edit</a></td>
+				<td><a asp-action="Delete" asp-route-Id="@item.Id" class ="btn btn-danger">Delete</a></td>
+			</tr>
+		}
+	</tbody>
+</table>

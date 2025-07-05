@@ -25,11 +25,8 @@ namespace MCV_Empity.Services.Implementations
 
 		public async Task<string> Upload(IFormFile file ,string Location)
         {
-            
-
                 try
                 {
-
                 var path = _webHostEnvironment.WebRootPath +Location;//folder معين جواه 
                 var extension = Path.GetExtension(file.FileName);
                 var fileName = Guid.NewGuid().ToString().Replace("-", "") + extension;

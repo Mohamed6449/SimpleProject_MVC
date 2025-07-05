@@ -2,15 +2,16 @@
 using MCV_Empity.Models;
 using MCV_Empity.Services.Implementations;
 using MCV_Empity.Services.InterFaces;
-using MCV_Empity.ViewModels;
+using MCV_Empity.ViewModels.Products;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System.Reflection;
 
 namespace MCV_Empity.Controllers
 {
-	public class productController : Controller
+    public class productController : Controller
 	{
 		private readonly IProductService _IproductService;
 		private IFileServiece _IFileServiece;
@@ -23,17 +24,42 @@ namespace MCV_Empity.Controllers
 			_categoryServices = categoryServices;
 			_mapper=mapper;
 		}
-		public async Task< ActionResult> Index()
+		[HttpGet]
+		public async Task<ActionResult> Index(string? search)
 		{
 
-			var products =await _IproductService.GetProducts();
+			//var cook=Request.Cookies["UserName"];
+			//var ses = HttpContext.Session.GetString("UserName");
+			
+			//ViewBag.Cook = ses;
 
-			return View(products);
+			var products = _IproductService.GetProductsAsQerayable(search);
+
+			var result =await _mapper.ProjectTo<GetProductListViewModel>(products).ToListAsync();
+
+			return View(result);
+		}
+
+		[HttpGet]
+		public async Task<ActionResult> SearchProductList(string? searchtext)
+		{
+
+			//var cook=Request.Cookies["UserName"];
+			//var ses = HttpContext.Session.GetString("UserName");
+
+			//ViewBag.Cook = ses;
+
+			var products = _IproductService.GetProductsAsQerayable(searchtext);
+
+			var result = await _mapper.ProjectTo<GetProductListViewModel>(products).ToListAsync();
+
+			return PartialView("_ProductList",result);
+
 
 		}
 		public async Task<IActionResult> Create()
 		{
-			ViewBag.Category= new SelectList(await	_categoryServices.GetCategories(),"Id","Name");
+			ViewBag.Category= new SelectList(await	_categoryServices.GetCategories(),"Id", "NameAr");
 			return View();
 		}
 
@@ -47,6 +73,17 @@ namespace MCV_Empity.Controllers
                 if (ModelState.IsValid)
                 {
 					var product = _mapper.Map<product>(model);
+					var result=await _IproductService.AddProduct(product,model.Files);
+					if (result != "Success")
+					{
+
+						ViewBag.Category = new SelectList(await _categoryServices.GetCategories(), "Id", "Name");
+						TempData["Failed"]=result;
+
+						return View(model);
+					}
+
+
 					//var product = new product()
 					//{
 					//	Name = model.Name,
@@ -54,20 +91,19 @@ namespace MCV_Empity.Controllers
 					//	,
 					//	CategoryId = model.CategoryId
 					//};
-				await _IproductService.AddProduct(product,model.Files);
+					TempData["Success"] = "Create Successfully ";
 					return RedirectToAction(nameof(Index));
 				}
-				else
-				{
-					ViewBag.Category = new SelectList(await _categoryServices.GetCategories(), "Id", "Name");
-					return View(model);
-				}
+				TempData["Failed"] = "valid data";
+				ViewBag.Category = new SelectList(await _categoryServices.GetCategories(), "Id", "Name");
+				return View(model);
 		
 			
 
 			}
-			catch(Exception)
+			catch(Exception ex)
 			{
+				TempData["Failed"] = ex.Message +"--"+ex.InnerException;
 				ViewBag.Category = new SelectList(await _categoryServices.GetCategories(), "Id", "Name");
 				return View();
 
@@ -83,33 +119,29 @@ namespace MCV_Empity.Controllers
 
 		public async Task<IActionResult> UpdateAsync(int Id) {
 			var pro = await _IproductService.GetProductById(Id);
-			return View(pro);
+
+			var result = _mapper.Map<UpdateProductViewModel>(pro);
+
+			ViewBag.Category = new SelectList(await _categoryServices.GetCategories(), "Id", "NameAr");
+			return View(result);
 		}
 		[HttpPost]
-		public async Task< IActionResult> IUpdate(product model)
+		public async Task< IActionResult> Update(UpdateProductViewModel model)
 		{
 			try
 			{
 				if (ModelState.IsValid)
 				{
-					var product = await _IproductService.GetProductById(model.Id);
+					var product = await _IproductService.GetProductByIdWithOutInclude(model.Id);
 					if(product == null)
 					{
 						return NotFound();
 					}
-					/*var path = model.path;
-					if (model.File?.Length > 0)
-					{
-						_IFileServiece.DeleteSource(path);
-						path = await _IFileServiece.Upload(model.File, "/image/");
-						if (path == "Not saved")
-						{
-							return BadRequest();
-						}
-					}
+					product = _mapper.Map<product>(model);
+	
+					await _IproductService.UpdateProduct(product,model.Files);
 
-					model.path = path;*/
-					await _IproductService.UpdateProduct(model);
+
 					return RedirectToAction(nameof(Index));
 				}
 				else
@@ -132,7 +164,7 @@ namespace MCV_Empity.Controllers
 
 		public async Task<IActionResult> Delete(int Id)
 		{
-			var pro = await _IproductService.GetProductById(Id);
+			var pro = await _IproductService.GetProductByIdWithOutInclude(Id);
 			return View(pro);
 		}
 		[HttpPost]
@@ -157,9 +189,16 @@ namespace MCV_Empity.Controllers
 		}
 
 		[HttpPost]
-		public async Task< IActionResult >IsProductNameExist(string name)
+		public async Task< IActionResult >IsProductNameArExist(string name)
 		{
-			var result =await _IproductService.IsProductNameExist(name);
+			var result =await _IproductService.IsProductNameArExist(name);
+			
+			return Json(!result);
+		}
+		[HttpPost]
+		public async Task< IActionResult >IsProductNameEnExist(string name)
+		{
+			var result =await _IproductService.IsProductNameEnExist(name);
 			
 			return Json(!result);
 		}
