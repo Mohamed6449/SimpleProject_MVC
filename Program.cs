@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddServiceDependencyInjection().AddRepositryDependencyInjection()
     .AddLocalizationDependencyInjection()
-	.AddGeneralRegistrationDependencyInjection(builder.Configuration);
+	.AddGeneralRegistrationDependencyInjection(builder.Configuration).AddIdentityDependencyInjection();
 
 
 builder.Services.AddControllersWithViews();

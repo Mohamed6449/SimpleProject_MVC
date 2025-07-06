@@ -32,11 +32,12 @@
 
 
             </ul>
-@*             <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    hello: @_contextAccessor.HttpContext?.Session.GetString("UserName");
+                   @*  hello: @_contextAccessor.HttpContext?.Session.GetString("UserName"); *@
+                   <a asp-controller="Account" asp-action="Register" class="nav-link">Register</a>
                 </li>
-            </ul> *@
+            </ul>
             <div class="col-md-6 text-right">
           
                     <partial name="_SelectLanguagePartial"></partial>

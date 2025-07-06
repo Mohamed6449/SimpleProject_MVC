@@ -1,5 +1,6 @@
 ﻿using MCV_Empity.Data;
 using MCV_Empity.SharedRepository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -11,7 +12,7 @@ namespace MCV_Empity.UnitOfWorks
 
         private readonly Dictionary<Type,object>_Repositories=new Dictionary<Type,object>();
 
-        private IDbContextTransaction _Transaction;
+        //private IDbContextTransaction _Transaction;
 
         private bool IsDispose = false;
         public UnitOfWork(AppDbContect Context)
@@ -22,13 +23,13 @@ namespace MCV_Empity.UnitOfWorks
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-             _Transaction= await _Context.Database.BeginTransactionAsync();
-            return _Transaction;
+            return await _Context.Database.BeginTransactionAsync();
+            
         }
 
         public async Task CommitTransactionAsync()
         {
-            await _Transaction.CommitAsync();
+            await _Context.Database.CommitTransactionAsync();
         }
 
         public async Task<int> CompleteAsync()
@@ -42,7 +43,8 @@ namespace MCV_Empity.UnitOfWorks
             {
                 if (disposing)
                 {
-                    _Transaction.Dispose();
+                    //_Transaction.Dispose();
+                    //_Context.Database.BeginTransaction().Dispose();
                     _Context.Dispose();
                 }
                 IsDispose = true;
@@ -69,7 +71,7 @@ namespace MCV_Empity.UnitOfWorks
 
         public async Task RollBackTransactionAsync()
         {
-            await _Transaction.CommitAsync();
+            await _Context.Database.RollbackTransactionAsync();
         }
     }
 }
