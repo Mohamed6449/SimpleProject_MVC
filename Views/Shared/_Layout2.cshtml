@@ -1,6 +1,8 @@
 ﻿@using MCV_Empity.Helper
-@inject IHttpContextAccessor _contextAccessor;
+@using Microsoft.AspNetCore.Identity
 
+@inject IHttpContextAccessor _contextAccessor;
+@inject SignInManager<IdentityUser> _signInManager;
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,20 +30,37 @@
                     <li class="nav-item">
                         <a asp-controller="Home" asp-action="Privacy" class="nav-link">Privacy</a>
                     </li>
-
-
-
             </ul>
+            
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                   @*  hello: @_contextAccessor.HttpContext?.Session.GetString("UserName"); *@
-                   <a asp-controller="Account" asp-action="Register" class="nav-link">Register</a>
+                
+                <li class="nav-item mt-2">
+                         <partial name="_SelectLanguagePartial"></partial>
                 </li>
-            </ul>
-            <div class="col-md-6 text-right">
           
-                    <partial name="_SelectLanguagePartial"></partial>
-            </div>       
+                @if (_signInManager.IsSignedIn(User))
+                    {
+                         <li class="nav-item">
+                            <form asp-action="Logout" asp-controller="Account" method="post">
+                                <button type="submit" class="nav-link btn btn-link py=0 ">
+                                    Logout @User.Identity.Name
+                                    </button>
+                            </form>
+
+                        </li>
+                    }
+                    else
+                    {
+                    <li class="nav-item">
+                       <a asp-controller="Account" asp-action="Register" class="nav-link">Register</a>
+                   </li>
+                   <li class="nav-item">
+                       <a asp-controller="Account" asp-action="LogIn" class="nav-link">LogIn</a>
+                   </li>
+                    }
+ 
+
+            </ul>
  
         </div>
     </nav>

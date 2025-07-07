@@ -7,10 +7,12 @@ namespace MCV_Empity.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         
-        public AccountController(UserManager<IdentityUser> userManager)
+        public AccountController(UserManager<IdentityUser> userManager , SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         [HttpGet]
         public IActionResult Register()
@@ -35,6 +37,7 @@ namespace MCV_Empity.Controllers
 
                     if (result.Succeeded)
                     {
+                       await _signInManager.SignInAsync(NewUser, isPersistent:false);
                        return RedirectToAction("Index", "Home");
                     }
                     foreach(var error in result.Errors)
@@ -52,5 +55,14 @@ namespace MCV_Empity.Controllers
             }
             return View(register);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index","Home");
+        }  
     }
 }
