@@ -6,7 +6,8 @@
 		public const string Price = "Price";
 		
 		public const string NameArIsRequired = "NameArIsRequired";
-		public const string NameEnIsRequired = "NameEnIsRequired";
+		public const string RequireEmail = "RequireEmail";
+		public const string UserNameOrPassIsWrong = "UserNameOrPassIsWrong";
 
 
 

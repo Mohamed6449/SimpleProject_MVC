@@ -2,11 +2,13 @@
 using MCV_Empity.Models;
 using MCV_Empity.Services.InterFaces;
 using MCV_Empity.ViewModels.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MCV_Empity.Controllers
 {
-	public class CategoryController : Controller
+  
+    public class CategoryController : Controller
 	{
 
 		private readonly ICategoryServices _categoryServices;

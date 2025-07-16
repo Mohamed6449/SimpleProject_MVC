@@ -129,4 +129,10 @@
   <data name="Price" xml:space="preserve">
     <value>Price value</value>
   </data>
+  <data name="RequireEmail" xml:space="preserve">
+    <value>please enter email</value>
+  </data>
+  <data name="UserNameOrPassIsWrong" xml:space="preserve">
+    <value>UserName Or Password Is Wrong</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using MCV_Empity.Models;
 using MCV_Empity.Services.Implementations;
 using MCV_Empity.Services.InterFaces;
 using MCV_Empity.ViewModels.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Reflection;
 
 namespace MCV_Empity.Controllers
 {
+	[Authorize(Roles ="Admin,User")]
     public class productController : Controller
 	{
 		private readonly IProductService _IproductService;
@@ -25,6 +27,7 @@ namespace MCV_Empity.Controllers
 			_mapper=mapper;
 		}
 		[HttpGet]
+		[AllowAnonymous]
 		public async Task<ActionResult> Index(string? search)
 		{
 
@@ -57,13 +60,15 @@ namespace MCV_Empity.Controllers
 
 
 		}
-		public async Task<IActionResult> Create()
+        [Authorize(Policy= "CreateProduct")]
+        public async Task<IActionResult> Create()
 		{
 			ViewBag.Category= new SelectList(await	_categoryServices.GetCategories(),"Id", "NameAr");
 			return View();
 		}
 
 		[HttpPost]
+        [Authorize(Policy= "CreateProduct")]
 		public async Task <IActionResult> Create(AddProductViewModels model)
 		{
             try

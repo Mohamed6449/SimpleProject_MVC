@@ -1,8 +1,9 @@
 ﻿@using MCV_Empity.Helper
+@using MCV_Empity.Models.Identity
 @using Microsoft.AspNetCore.Identity
-
+@inject UserManager<User> _userManager;
 @inject IHttpContextAccessor _contextAccessor;
-@inject SignInManager<IdentityUser> _signInManager;
+@inject SignInManager<User> _signInManager;
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,6 +31,20 @@
                     <li class="nav-item">
                         <a asp-controller="Home" asp-action="Privacy" class="nav-link">Privacy</a>
                     </li>
+                    @if (_signInManager.IsSignedIn(User)&&User.IsInRole("Admin"))
+                    {
+                        
+                        <li class="nav-item">
+                            <a asp-controller="Role" asp-action="Index" class="nav-link">Roles</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a asp-controller="User" asp-action="Index" class="nav-link">Users</a>
+                    </li> 
+                    <li class="nav-item">
+                            <a asp-controller="Claim" asp-action="Index" class="nav-link">Claims</a>
+                    </li>
+                    }
+
             </ul>
             
             <ul class="navbar-nav ml-auto">
@@ -55,7 +70,7 @@
                        <a asp-controller="Account" asp-action="Register" class="nav-link">Register</a>
                    </li>
                    <li class="nav-item">
-                       <a asp-controller="Account" asp-action="LogIn" class="nav-link">LogIn</a>
+                       <a asp-controller="Account" asp-action="Login" class="nav-link">LogIn</a>
                    </li>
                     }
  

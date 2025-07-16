@@ -17,6 +17,10 @@ namespace MCV_Empity.DependencyInjections
 
             
             Services.AddTransient<IFileServiece, FileServices>();
+
+            Services.AddTransient<IClaimService, ClaimService>();
+
+            
             
             
             return Services;

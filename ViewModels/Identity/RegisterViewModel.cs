@@ -5,6 +5,16 @@ namespace MCV_Empity.ViewModels.Identity
     public class RegisterViewModel
     {
         [Required]
+        public string NameAr { get; set; }
+        [Required]
+        public string NameEn { get; set; }
+
+        public string? Address { get; set; }
+
+        [Required]
+        public string UserName { get; set; }
+
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 

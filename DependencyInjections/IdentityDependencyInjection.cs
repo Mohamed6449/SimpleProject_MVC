@@ -1,4 +1,5 @@
 ﻿using MCV_Empity.Data;
+using MCV_Empity.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace MCV_Empity.DependencyInjections
@@ -7,7 +8,7 @@ namespace MCV_Empity.DependencyInjections
     {
         public static IServiceCollection AddIdentityDependencyInjection(this IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>(Opt=> {
+            services.AddIdentity<User, IdentityRole>(Opt=> {
                 Opt.Password.RequireDigit = true;
                 Opt.Password.RequireLowercase = true;
                 Opt.Password.RequireUppercase = true;
@@ -31,9 +32,15 @@ namespace MCV_Empity.DependencyInjections
                 .AddEntityFrameworkStores<AppDbContect>()
                 .AddDefaultTokenProviders() ;
 
+            services.AddAuthorization(options =>
+            options.AddPolicy("CreateProduct",policy=>policy.
+            RequireAssertion(context=>context.User.IsInRole("Admin")&& context.User.HasClaim("Create Product","True"))
+
+            )) ;
 
 
-            return services;
+
+			return services;
         }
 
     }
